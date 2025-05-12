@@ -7,10 +7,12 @@ import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 
+import java.util.Random;
+
 public class AsteroidProcessor implements IEntityProcessingService {
 
     private IAsteroidSplitter asteroidSplitter = new AsteroidSplitterImpl();
-    private int asteroidMinCount = 5;
+    private int asteroidMinCount = 10;
     @Override
     public void process(GameData gameData, World world) {
         SpawnAsteroids(gameData, world);
@@ -18,38 +20,37 @@ public class AsteroidProcessor implements IEntityProcessingService {
             double changeX = Math.cos(Math.toRadians(asteroid.getRotation()));
             double changeY = Math.sin(Math.toRadians(asteroid.getRotation()));
 
-            asteroid.setX(asteroid.getX() + changeX * 0.5);
-            asteroid.setY(asteroid.getY() + changeY * 0.5);
+            asteroid.setX(asteroid.getX() + changeX * 0.75);
+            asteroid.setY(asteroid.getY() + changeY * 0.75);
 
+            // Wrap X
             if (asteroid.getX() < 0) {
-                asteroid.setX(asteroid.getX() - gameData.getDisplayWidth());
+                asteroid.setX(gameData.getDisplayWidth());
+            } else if (asteroid.getX() > gameData.getDisplayWidth()) {
+                asteroid.setX(0);
             }
 
-            if (asteroid.getX() > gameData.getDisplayWidth()) {
-                asteroid.setX(asteroid.getX() % gameData.getDisplayWidth());
-            }
-
+            // Wrap Y
             if (asteroid.getY() < 0) {
-                asteroid.setY(asteroid.getY() - gameData.getDisplayHeight());
+                asteroid.setY(gameData.getDisplayHeight());
+            } else if (asteroid.getY() > gameData.getDisplayHeight()) {
+                asteroid.setY(0);
             }
-
-            if (asteroid.getY() > gameData.getDisplayHeight()) {
-                asteroid.setY(asteroid.getY() % gameData.getDisplayHeight());
-            }
-
         }
-
     }
-
+    Random rnd = new Random();
+    int toSpawn = 1 + rnd.nextInt(3);
     public void SpawnAsteroids(GameData gameData, World world){
         int asteroidCount = world.getEntities(Asteroid.class).size();
-        if(asteroidCount < asteroidMinCount){
+        if (asteroidCount < asteroidMinCount) {
             AsteroidPlugin asteroidPlugin = new AsteroidPlugin();
-            Entity asteroid = asteroidPlugin.createAsteroid(gameData);
-            world.addEntity(asteroid);
-
+            for (int i = 0; i < 3; i++) {
+                Entity asteroid = asteroidPlugin.createAsteroid(gameData);
+                world.addEntity(asteroid);
+            }
         }
     }
+
 
     /**
      * Dependency Injection using OSGi Declarative Services

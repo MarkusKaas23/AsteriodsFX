@@ -15,20 +15,23 @@ public class AsteroidSplitterImpl implements IAsteroidSplitter {
 
     @Override
     public void createSplitAsteroid(Entity e, World world) {
-        if(e.getSize() < 4) {
+        if(e.getSize() < 6) {
             System.out.println("Asteroid too small to split");
             return;
         }
-        for (int i = 0; i < 2; i++) {
+        Random rnd = new Random();
+        int splitCount = 2 + rnd.nextInt(3);
+
+        for (int i = 0; i < splitCount; i++) {
             System.out.println("Creating split asteroid");
             Entity asteroid = new Asteroid();
-            Random rnd = new Random();
-            float size = e.getSize() / 2;
+
+            float size = e.getSize() / 3;
             asteroid.setPolygonCoordinates(size, -size, -size, -size, -size, size, size, size);
             asteroid.setX(e.getX() + rnd.nextInt(10));
             asteroid.setY(e.getY() + rnd.nextInt(10));
             asteroid.setRadius(size);
-            asteroid.setRotation(rnd.nextInt(90));
+            asteroid.setRotation(rnd.nextInt(360));
             world.addEntity(asteroid);
         }
 
