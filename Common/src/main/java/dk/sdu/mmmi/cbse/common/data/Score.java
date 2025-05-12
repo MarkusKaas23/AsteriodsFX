@@ -1,60 +1,74 @@
 package dk.sdu.mmmi.cbse.common.data;
+
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Scanner;
 
 public class Score {
-    public int score;
-    public int highScore;
+    private int score;
+    private int highScore;
+    private static final String FILE_NAME = "highscore.txt";
     private static Score instance;
 
-    public static Score getInstance(){
-        if(instance == null){
+    private Score() {
+        this.score = 0;
+        this.highScore = readHighScoreFromFile();
+    }
+
+    public static Score getInstance() {
+        if (instance == null) {
             instance = new Score();
         }
         return instance;
     }
 
-    private Score(){
-        this.score = 0;
-        try{
-            File file = new File("highscore.txt");
-            file.createNewFile();
-
-            Scanner scanner = new Scanner(file);
-            if(scanner.hasNextInt()){
-                this.highScore = scanner.nextInt();
-            } else {
-                this.highScore = 0;
-            }
-            scanner.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public int getScore() {
         return score;
     }
-    public void setHighScore(int highScore) {
-        try{
-            FileWriter fileWriter = new FileWriter("highscore.txt");
-            fileWriter.write(String.valueOf(highScore));
-            fileWriter.close();
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public void setScore(int newScore) {
+        this.score = newScore;
     }
-    public void setScore(int score) {
-        this.score = score;
+
+    public void incrementScore(int increment) {
+        this.score += increment;
     }
+
     public int getHighScore() {
         return highScore;
     }
-    public void incrementScore(int increment) {
-        this.score += increment;
+
+    public void setHighScore(int newHighScore) {
+        this.highScore = newHighScore;
+        writeHighScoreToFile(newHighScore);
+    }
+
+    private int readHighScoreFromFile() {
+        File file = new File(FILE_NAME);
+        try {
+            if (!file.exists()) {
+                file.createNewFile();
+                return 0;
+            }
+
+            Scanner scanner = new Scanner(file);
+            if (scanner.hasNextInt()) {
+                int value = scanner.nextInt();
+                scanner.close();
+                return value;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    private void writeHighScoreToFile(int score) {
+        try (FileWriter writer = new FileWriter(FILE_NAME)) {
+            writer.write(String.valueOf(score));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

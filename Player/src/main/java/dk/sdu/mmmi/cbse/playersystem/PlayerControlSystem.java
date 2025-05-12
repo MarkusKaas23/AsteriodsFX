@@ -20,10 +20,10 @@ public class PlayerControlSystem implements IEntityProcessingService {
     public void process(GameData gameData, World world) {
         for (Entity player : world.getEntities(Player.class)) {
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {
-                player.setRotation(player.getRotation() - 1);
+                player.setRotation(player.getRotation() - 1.5);
             }
             if (gameData.getKeys().isDown(GameKeys.RIGHT)) {
-                player.setRotation(player.getRotation() + 1);
+                player.setRotation(player.getRotation() + 1.5);
             }
             if (gameData.getKeys().isDown(GameKeys.UP)) {
                 double changeX = Math.cos(Math.toRadians(player.getRotation()));
@@ -38,19 +38,19 @@ public class PlayerControlSystem implements IEntityProcessingService {
             }
             
             if (player.getX() < 0) {
-                player.setX(1);
+                player.setX(1.25);
             }
 
             if (player.getX() > gameData.getDisplayWidth()) {
-                player.setX(gameData.getDisplayWidth()-1);
+                player.setX(gameData.getDisplayWidth()-1.25);
             }
 
             if (player.getY() < 0) {
-                player.setY(1);
+                player.setY(1.25);
             }
 
             if (player.getY() > gameData.getDisplayHeight()) {
-                player.setY(gameData.getDisplayHeight()-1);
+                player.setY(gameData.getDisplayHeight()-1.25);
             }
 
                                         

@@ -24,20 +24,18 @@ public class EnemyControlSystem implements IEntityProcessingService {
         for (Entity enemy : world.getEntities(Enemy.class)) {
             Random rnd = new Random();
 
-            double changeX = Math.cos(Math.toRadians(enemy.getRotation()));
-            double changeY = Math.sin(Math.toRadians(enemy.getRotation()));
+            double changeX = Math.cos(Math.toRadians(enemy.getRotation())) * 1.5;
+            double changeY = Math.sin(Math.toRadians(enemy.getRotation())) * 1.5;
 
             enemy.setX(enemy.getX() + changeX);
             enemy.setY(enemy.getY() + changeY);
 
             if (inBox) {
-                // Apply initial random rotation when inside the box
-                if (rotationSpeed == 0) { // Initialize rotationSpeed only once
+                if (rotationSpeed == 0) {
                     rotationSpeed = 2 * rnd.nextDouble();
                 }
             } else {
-                // When out of the box, change the rotation direction
-                rotationSpeed = 2 * (rnd.nextDouble() - 0.5); // New random rotation direction
+                rotationSpeed = 4 * (rnd.nextDouble() - 0.5);
             }
 
             enemy.setRotation(enemy.getRotation() + rotationSpeed);
@@ -69,8 +67,8 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
             int shootDecider = rnd.nextInt(200) + 1;
 
-            if(shootDecider == 50){
-                for (int i = 0; i < 5; i++) {
+            if(shootDecider == 75){
+                for (int i = 0; i < 4; i++) {
                     getBulletSPIs().stream().findFirst().ifPresent(
                             spi -> world.addEntity(spi.createBullet(enemy, gameData))
                     );
@@ -82,7 +80,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
     }
     private void RespawnEnemy(GameData gameData, World world) {
         int enemyCount = world.getEntities(Enemy.class).size();
-        if (enemyCount >= 1) {
+        if (enemyCount >= 3) {
             return;
         }
         Random rnd = new Random();

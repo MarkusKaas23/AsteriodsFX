@@ -36,11 +36,11 @@ public class Main extends Application {
     private final World world = new World();
     private final Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
     private final Pane gameWindow = new Pane();
-    private int score;
     public static void main(String[] args) {
         launch(Main.class);
     }
-    private Text text;
+    private Text asteroidText;
+    private Text highscoreText;
     private IScoreService scoreService;
     @Override
     public void start(Stage window) throws Exception {
@@ -48,9 +48,11 @@ public class Main extends Application {
         for (IScoreService service : loader) {
              scoreService = service;
         }
-        text = new Text(10, 20, "Destroyed asteroids: " + scoreService.getScore());
+        asteroidText = new Text(10, 20, "Destroyed asteroids: " + scoreService.getScore());
+        highscoreText = new Text(10, 40, "Highscore: " + scoreService.getHighScore());
         gameWindow.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
-        gameWindow.getChildren().add(text);
+        gameWindow.getChildren().add(asteroidText);
+        gameWindow.getChildren().add(highscoreText);
 
         Scene scene = new Scene(gameWindow);
         scene.setOnKeyPressed(event -> {
@@ -100,6 +102,13 @@ public class Main extends Application {
 
     }
 
+    @Override
+    public void stop() {
+        for (IGamePluginService plugin : getPluginServices()) {
+            plugin.stop(gameData, world);
+        }
+    }
+
     private void render() {
         new AnimationTimer() {
             @Override
@@ -107,7 +116,8 @@ public class Main extends Application {
                 update();
                 draw();
                 gameData.getKeys().update();
-                text.setText("Destroyed asteroids: " + scoreService.getScore());
+                asteroidText.setText("Destroyed asteroids: " + scoreService.getScore());
+                highscoreText.setText("Highscore: " + scoreService.getHighScore());
 
             }
 
