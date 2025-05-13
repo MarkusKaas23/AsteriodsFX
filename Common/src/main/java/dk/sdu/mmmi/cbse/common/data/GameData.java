@@ -1,5 +1,7 @@
 package dk.sdu.mmmi.cbse.common.data;
 
+import javafx.scene.layout.Pane;
+
 public class GameData {
 
     private int displayWidth  = 800 ;
@@ -27,6 +29,15 @@ public class GameData {
         return displayHeight;
     }
 
+    private Pane gameNode;
+
+    public Pane getGameNode() {
+        return gameNode;
+    }
+
+    public void setGameNode(Pane gameNode) {
+        this.gameNode = gameNode;
+    }
 
     public void setKeys(GameKeys keys) {
         this.keys = keys;

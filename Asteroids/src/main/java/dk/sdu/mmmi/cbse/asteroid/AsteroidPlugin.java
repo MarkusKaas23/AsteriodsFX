@@ -23,7 +23,6 @@ public class AsteroidPlugin implements IGamePluginService {
 
     @Override
     public void stop(GameData gameData, World world) {
-        // Remove entities
         for (Entity asteroid : world.getEntities(Asteroid.class)) {
             world.removeEntity(asteroid);
         }
@@ -33,7 +32,15 @@ public class AsteroidPlugin implements IGamePluginService {
         Entity asteroid = new Asteroid();
         Random rnd = new Random();
         float size = rnd.nextInt(25) + 5;
-        asteroid.setPolygonCoordinates(size, -size, -size, -size, -size, size, size, size);
+        asteroid.setPolygonCoordinates(
+                size, 0f,
+                size * 0.6f, size * 0.8f,
+                0f, size,
+                -size * 0.7f, size * 0.6f,
+                -size, 0f,
+                -size * 0.4f, -size * 0.8f,
+                size * 0.5f, -size * 0.7f
+        );
         asteroid.setSize(size);
         asteroid.setRadius(size);
         asteroid.setRotation(rnd.nextInt(360));
@@ -43,22 +50,10 @@ public class AsteroidPlugin implements IGamePluginService {
         int height = gameData.getDisplayHeight();
 
         switch (edge) {
-            case 0: // Top
-                asteroid.setX(rnd.nextInt(width));
-                asteroid.setY(0);
-                break;
-            case 1: // Bottom
-                asteroid.setX(rnd.nextInt(width));
-                asteroid.setY(height);
-                break;
-            case 2: // Left
-                asteroid.setX(0);
-                asteroid.setY(rnd.nextInt(height));
-                break;
-            case 3: // Right
-                asteroid.setX(width);
-                asteroid.setY(rnd.nextInt(height));
-                break;
+            case 0: asteroid.setX(rnd.nextInt(width)); asteroid.setY(0); break;
+            case 1: asteroid.setX(rnd.nextInt(width)); asteroid.setY(height); break;
+            case 2: asteroid.setX(0); asteroid.setY(rnd.nextInt(height)); break;
+            case 3: asteroid.setX(width); asteroid.setY(rnd.nextInt(height)); break;
         }
 
         return asteroid;

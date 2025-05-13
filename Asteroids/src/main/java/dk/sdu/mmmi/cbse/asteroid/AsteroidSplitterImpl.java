@@ -15,7 +15,7 @@ public class AsteroidSplitterImpl implements IAsteroidSplitter {
 
     @Override
     public void createSplitAsteroid(Entity e, World world) {
-        if(e.getSize() < 6) {
+        if(e.getSize() < 5) {
             System.out.println("Asteroid too small to split");
             return;
         }
@@ -27,7 +27,15 @@ public class AsteroidSplitterImpl implements IAsteroidSplitter {
             Entity asteroid = new Asteroid();
 
             float size = e.getSize() / 3;
-            asteroid.setPolygonCoordinates(size, -size, -size, -size, -size, size, size, size);
+            asteroid.setPolygonCoordinates(
+                    size, 0f,
+                    size * 0.6f, size * 0.8f,
+                    0f, size,
+                    -size * 0.7f, size * 0.6f,
+                    -size, 0f,
+                    -size * 0.4f, -size * 0.8f,
+                    size * 0.5f, -size * 0.7f
+            );
             asteroid.setX(e.getX() + rnd.nextInt(10));
             asteroid.setY(e.getY() + rnd.nextInt(10));
             asteroid.setRadius(size);
