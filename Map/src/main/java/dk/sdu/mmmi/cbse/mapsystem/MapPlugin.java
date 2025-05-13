@@ -9,7 +9,7 @@ import javafx.scene.layout.Pane;
 
 public class MapPlugin implements IGamePluginService {
 
-    private ImageView backgroundView;
+    ImageView backgroundView;
 
     @Override
     public void start(GameData gameData, World world) {
