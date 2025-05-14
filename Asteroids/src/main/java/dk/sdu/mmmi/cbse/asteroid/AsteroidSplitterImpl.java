@@ -39,6 +39,7 @@ public class AsteroidSplitterImpl implements IAsteroidSplitter {
             asteroid.setX(e.getX() + rnd.nextInt(10));
             asteroid.setY(e.getY() + rnd.nextInt(10));
             asteroid.setRadius(size);
+            asteroid.setSize(size);
             asteroid.setRotation(rnd.nextInt(360));
             world.addEntity(asteroid);
         }

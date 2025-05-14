@@ -1,11 +1,9 @@
 package dk.sdu.mmmi.cbse.main;
 
-import dk.sdu.mmmi.cbse.Enemy;
 import dk.sdu.mmmi.cbse.common.asteroids.IAsteroidSplitter;
 import dk.sdu.mmmi.cbse.common.bullet.Bullet;
 import dk.sdu.mmmi.cbse.common.data.*;
 import dk.sdu.mmmi.cbse.common.services.*;
-import dk.sdu.mmmi.cbse.playersystem.Player;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -137,17 +135,16 @@ public class Main extends Application {
     }
 
     private void draw() {
-        // Remove disappeared entities
-        for (Entity e : polygons.keySet()) {
-            if (!world.getEntities().contains(e)) {
-                Polygon poly = polygons.get(e);
-                gameWindow.getChildren().remove(poly);
+
+        polygons.keySet().removeIf(entity -> {
+            if (!world.getEntities().contains(entity)) {
+                gameWindow.getChildren().remove(polygons.get(entity));
+                return true;
             }
-        }
-        polygons.keySet().removeIf(e -> !world.getEntities().contains(e));
+            return false;
+        });
 
-
-        // Draw current entities
+        // Draw/update current entities
         for (Entity entity : world.getEntities()) {
             Polygon polygon = polygons.get(entity);
             if (polygon == null) {
@@ -155,30 +152,32 @@ public class Main extends Application {
                 polygons.put(entity, polygon);
                 gameWindow.getChildren().add(polygon);
             }
-            if (entity instanceof Player) {
+
+            // Colors
+            String type = (String) entity.getAttribute("type");
+            if ("player".equals(type)) {
                 polygon.setFill(Color.LIGHTBLUE);
-            }
-
-            if (entity instanceof Bullet){
-                polygon.setFill(Color.DARKBLUE);
-            }
-
-            if (entity instanceof Enemy){
+            } else if ("bullet".equals(type)) {
+                polygon.setFill(Color.LIMEGREEN);
+            } else if ("enemy".equals(type)) {
                 polygon.setFill(Color.RED);
+            } else {
+                //for asteroid
+                polygon.setFill(Color.GRAY);
+                polygon.setStroke(Color.BLACK);
             }
 
             polygon.setTranslateX(entity.getX());
             polygon.setTranslateY(entity.getY());
             polygon.setRotate(entity.getRotation());
+        }
+        //Gameover
+        boolean playerAlive = world.getEntities().stream()
+                .anyMatch(e -> "player".equals(e.getAttribute("type")));
 
-            boolean playerAlive = world.getEntities().stream().anyMatch(e -> e instanceof Player);
-
-            if (!playerAlive && !gameOverDisplayed) {
-                gameOverText.setVisible(true);
-                gameOverDisplayed = true;
-
-
-            }
+        if (!playerAlive && !gameOverDisplayed) {
+            gameOverText.setVisible(true);
+            gameOverDisplayed = true;
         }
     }
 

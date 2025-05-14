@@ -29,7 +29,7 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         for (Entity entity : world.getEntities(Bullet.class)) {
             Bullet bullet = (Bullet) entity;
 
-            // Move bullet
+            // Movement for bullet
             double changeX = Math.cos(Math.toRadians(bullet.getRotation()));
             double changeY = Math.sin(Math.toRadians(bullet.getRotation()));
             bullet.setX(bullet.getX() + changeX * 5);
@@ -54,7 +54,6 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
     }
 
 
-
     @Override
     public Entity createBullet(Entity shooter, GameData gameData) {
         Bullet bullet = new Bullet();
@@ -65,8 +64,11 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         bullet.setY(shooter.getY() + changeY * 10);
         bullet.setRotation(shooter.getRotation());
         bullet.setRadius(1);
-        bullet.setCreationTime(System.currentTimeMillis()); // Set creation timestamp
+        bullet.setCreationTime(System.currentTimeMillis());
         bullet.setExpiration(1000); // 1 sek levetid
+
+        bullet.setAttribute("type", "bullet");
+
         return bullet;
     }
 

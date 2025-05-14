@@ -15,7 +15,7 @@
     <module>CommonAsteroids</module>
     <module>Asteroids</module>
     <module>Collision</module>
-    <module>EnemyShip</module>
+    <module>Enemy</module>
     <module>ScoreSystem</module>
     <module>Map</module>
   </modules>

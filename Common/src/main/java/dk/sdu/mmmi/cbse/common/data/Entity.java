@@ -1,6 +1,8 @@
 package dk.sdu.mmmi.cbse.common.data;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class Entity implements Serializable {
@@ -67,6 +69,21 @@ public class Entity implements Serializable {
     public void setSize(float size) {
         this.size = size;
     }
+
+    private Map<String, Object> attributes = new HashMap<>();
+
+    public void setAttribute(String key, Object value) {
+        attributes.put(key, value);
+    }
+
+    public Object getAttribute(String key) {
+        return attributes.get(key);
+    }
+
+    public boolean hasAttribute(String key) {
+        return attributes.containsKey(key);
+    }
+
     @Override
     public String toString() {
         return this.getClass().getSimpleName();

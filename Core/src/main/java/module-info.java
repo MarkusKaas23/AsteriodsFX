@@ -1,12 +1,8 @@
 module Core {
     requires Common;
     requires javafx.graphics;
-    requires Collision;
     requires CommonAsteroids;
-    requires Asteroid;
-    requires Player;
     requires CommonBullet;
-    requires EnemyShip;
     opens dk.sdu.mmmi.cbse.main to javafx.graphics;
     uses dk.sdu.mmmi.cbse.common.services.IScoreService;
     uses dk.sdu.mmmi.cbse.common.services.IGamePluginService;

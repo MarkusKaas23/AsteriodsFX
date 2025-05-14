@@ -11,24 +11,23 @@ public class EnemyPlugin implements IGamePluginService {
 
     private Entity enemy;
 
-    public EnemyPlugin() {
-    }
+    public EnemyPlugin() {}
 
     @Override
     public void start(GameData gameData, World world) {
         enemy = createEnemy(gameData);
         world.addEntity(enemy);
-
     }
-    
-    public Entity createEnemy(GameData gameData) {
 
+    public Entity createEnemy(GameData gameData) {
         Entity enemyShip = new Enemy();
+        enemyShip.setAttribute("type", "enemy");
+
         Random rnd = new Random();
-        enemyShip.setPolygonCoordinates(-5,-5,10,0,-5,5);
+        enemyShip.setPolygonCoordinates(-5, -5, 10, 0, -5, 5);
         enemyShip.setX(rnd.nextInt(600 - 200) + 200);
         enemyShip.setY(rnd.nextInt(600 - 200) + 200);
-        enemyShip.setRadius(8);
+        enemyShip.setRadius(5);
         enemyShip.setRotation(rnd.nextInt(90));
         return enemyShip;
     }

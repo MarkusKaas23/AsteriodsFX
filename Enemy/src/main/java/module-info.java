@@ -1,7 +1,7 @@
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 
-module EnemyShip {
+module Enemy {
     exports dk.sdu.mmmi.cbse;
     requires Common;
     requires CommonBullet;
@@ -9,11 +9,3 @@ module EnemyShip {
     provides IGamePluginService with dk.sdu.mmmi.cbse.EnemyPlugin;
     provides IEntityProcessingService with dk.sdu.mmmi.cbse.EnemyControlSystem;
 }
-
-
-
-
-
-
-
-
