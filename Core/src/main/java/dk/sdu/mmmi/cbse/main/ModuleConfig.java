@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 import java.util.ServiceLoader;
-import static java.util.stream.Collectors.toList;
+import java.util.stream.Collectors;
 
 @Configuration
 @ComponentScan("dk.sdu.mmmi.cbse")
@@ -26,33 +26,69 @@ public class ModuleConfig {
     }
 
     @Bean
-    public List<IEntityProcessingService> entityProcessingServiceList() {
-        return ServiceLoader.load(IEntityProcessingService.class)
-                .stream()
-                .map(ServiceLoader.Provider::get)
-                .collect(toList());
+    public List<IEntityProcessingService> entityProcessingServices() {
+        return loadServices(IEntityProcessingService.class);
     }
 
     @Bean
     public List<IGamePluginService> gamePluginServices() {
-        return ServiceLoader.load(IGamePluginService.class)
-                .stream()
-                .map(ServiceLoader.Provider::get)
-                .collect(toList());
+        return loadServices(IGamePluginService.class);
     }
 
     @Bean
     public List<IPostEntityProcessingService> postEntityProcessingServices() {
-        return ServiceLoader.load(IPostEntityProcessingService.class)
-                .stream()
-                .map(ServiceLoader.Provider::get)
-                .collect(toList());
+        return loadServices(IPostEntityProcessingService.class);
+    }
+
+    /**
+     * Replace this with your actual score service implementation bean.
+     */
+    @Bean
+    public IScoreService scoreService() {
+        // TODO: Provide a concrete implementation, e.g. new ScoreServiceImpl()
+        return new IScoreService() {
+            private int score = 0;
+            private int highScore = 0;
+
+            @Override
+            public int getScore() {
+                return score;
+            }
+
+            @Override
+            public int getHighScore() {
+                return highScore;
+            }
+
+            @Override
+            public void incrementScore() {
+
+            }
+
+            @Override
+            public void setHighScore(int highScore) {
+
+            }
+
+            @Override
+            public void setScore(int score) {
+
+            }
+        };
     }
 
     @Bean
     public Game game(List<IGamePluginService> plugins,
                      List<IEntityProcessingService> entityProcessors,
-                     List<IPostEntityProcessingService> postProcessors) {
-        return new Game(plugins, entityProcessors, postProcessors);
+                     List<IPostEntityProcessingService> postProcessors,
+                     IScoreService scoreService) {
+        return new Game(plugins, entityProcessors, postProcessors, scoreService);
+    }
+
+    private <T> List<T> loadServices(Class<T> serviceClass) {
+        return ServiceLoader.load(serviceClass)
+                .stream()
+                .map(ServiceLoader.Provider::get)
+                .collect(Collectors.toList());
     }
 }
