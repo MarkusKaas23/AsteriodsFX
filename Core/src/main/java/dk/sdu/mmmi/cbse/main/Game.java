@@ -12,6 +12,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.nio.file.*;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,6 +38,10 @@ public class Game {
 
     private AnimationTimer gameLoop;
 
+    // Highscore file and value
+    private int highscore = 0;
+    private final Path highscoreFile = Paths.get("Highscore.txt");
+
     public Game(
             List<IGamePluginService> gamePluginServices,
             List<IEntityProcessingService> entityProcessingServices,
@@ -49,6 +55,8 @@ public class Game {
     }
 
     public void start(Stage stage) {
+        loadHighscore();  // Load highscore from file at start
+
         gameWindow.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
 
         asteroidText.setFont(Font.font("Phosphate", 24));
@@ -56,6 +64,7 @@ public class Game {
 
         highscoreText.setFont(Font.font("Phosphate", 24));
         highscoreText.setFill(Color.WHITE);
+        highscoreText.setText("Highscore: " + highscore);
 
         gameOverText.setFont(Font.font("Phosphate", 48));
         gameOverText.setFill(Color.RED);
@@ -106,7 +115,7 @@ public class Game {
         }
 
         asteroidText.setText("Destroyed: " + scoreService.getScore());
-        highscoreText.setText("Highscore: " + scoreService.getHighScore());
+        highscoreText.setText("Highscore: " + highscore);
 
         if (gameLoop == null) {
             gameLoop = new AnimationTimer() {
@@ -116,9 +125,15 @@ public class Game {
                     draw();
                     gameData.getKeys().update();
 
-                    // Update score texts continuously
-                    asteroidText.setText("Destroyed: " + scoreService.getScore());
-                    highscoreText.setText("Highscore: " + scoreService.getHighScore());
+                    int currentScore = scoreService.getScore();
+                    asteroidText.setText("Destroyed: " + currentScore);
+
+                    // Update highscore if beaten
+                    if (currentScore > highscore) {
+                        highscore = currentScore;
+                        saveHighscore();
+                    }
+                    highscoreText.setText("Highscore: " + highscore);
                 }
             };
             gameLoop.start();
@@ -187,6 +202,28 @@ public class Game {
             gameLoop.stop();
         }
         gamePluginServices.forEach(plugin -> plugin.stop(gameData, world));
+    }
+
+    private void loadHighscore() {
+        if (Files.exists(highscoreFile)) {
+            try {
+                String content = Files.readString(highscoreFile).trim();
+                highscore = Integer.parseInt(content);
+            } catch (IOException | NumberFormatException e) {
+                System.err.println("Failed to load highscore: " + e.getMessage());
+                highscore = 0;
+            }
+        } else {
+            highscore = 0;
+        }
+    }
+
+    private void saveHighscore() {
+        try {
+            Files.writeString(highscoreFile, String.valueOf(highscore));
+        } catch (IOException e) {
+            System.err.println("Failed to save highscore: " + e.getMessage());
+        }
     }
 
     public GameData getGameData() {
