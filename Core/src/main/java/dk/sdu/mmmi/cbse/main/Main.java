@@ -12,7 +12,6 @@ public class Main extends Application {
 
         Game game = context.getBean(Game.class);
         game.start(stage);
-        game.render();
     }
 
     public static void main(String[] args) {

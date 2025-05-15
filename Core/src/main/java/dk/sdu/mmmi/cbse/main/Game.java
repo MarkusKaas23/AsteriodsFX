@@ -59,6 +59,7 @@ public class Game {
 
         gameWindow.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
 
+        // Setup texts
         asteroidText.setFont(Font.font("Phosphate", 24));
         asteroidText.setFill(Color.WHITE);
 
@@ -72,14 +73,15 @@ public class Game {
 
         gameWindow.getChildren().addAll(asteroidText, highscoreText, gameOverText);
 
+        // Setup scene and input
         Scene scene = new Scene(gameWindow);
         gameData.setGameNode(gameWindow);
         setupInput(scene);
 
-        // Start all plugins
+        // Start plugins
         gamePluginServices.forEach(plugin -> plugin.start(gameData, world));
 
-        // Create polygons for all entities in the world
+        // Create polygons for existing entities
         for (Entity entity : world.getEntities()) {
             Polygon polygon = new Polygon(entity.getPolygonCoordinates());
             polygons.put(entity, polygon);
@@ -89,6 +91,9 @@ public class Game {
         stage.setScene(scene);
         stage.setTitle("Asteroids");
         stage.show();
+
+        // START GAME LOOP HERE!
+        render();
     }
 
     private void setupInput(Scene scene) {
@@ -114,9 +119,6 @@ public class Game {
             throw new IllegalStateException("ScoreService is not initialized");
         }
 
-        asteroidText.setText("Destroyed: " + scoreService.getScore());
-        highscoreText.setText("Highscore: " + highscore);
-
         if (gameLoop == null) {
             gameLoop = new AnimationTimer() {
                 @Override
@@ -128,7 +130,6 @@ public class Game {
                     int currentScore = scoreService.getScore();
                     asteroidText.setText("Destroyed: " + currentScore);
 
-                    // Update highscore if beaten
                     if (currentScore > highscore) {
                         highscore = currentScore;
                         saveHighscore();
