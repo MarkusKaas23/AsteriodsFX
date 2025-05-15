@@ -4,6 +4,7 @@ import dk.sdu.mmmi.cbse.common.data.Score;
 import dk.sdu.mmmi.cbse.common.services.IScoreService;
 
 public class ScoreServiceImpl implements IScoreService {
+
     private final Score score = Score.getInstance();
     @Override
     public int getScore() {

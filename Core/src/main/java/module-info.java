@@ -3,7 +3,15 @@ module Core {
     requires javafx.graphics;
     requires CommonAsteroids;
     requires CommonBullet;
-    opens dk.sdu.mmmi.cbse.main to javafx.graphics;
+    requires spring.context;
+    requires spring.beans;
+    requires spring.core;
+    requires ScoreSystem;
+
+
+    exports dk.sdu.mmmi.cbse.main;
+
+    opens dk.sdu.mmmi.cbse.main to spring.core, spring.beans, spring.context;
     uses dk.sdu.mmmi.cbse.common.services.IScoreService;
     uses dk.sdu.mmmi.cbse.common.services.IGamePluginService;
     uses dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
