@@ -2,39 +2,45 @@ package dk.sdu.mmmi.cbse.playersystem;
 
 import dk.sdu.mmmi.cbse.common.data.Entity;
 
-/**
- *
- * @author Emil
- */
 public class Player extends Entity {
-/* Health feat.  - Not used
-    private int health = 3; /
+    private double dx = 0;
+    private double dy = 0;
+    private long lastShotTime = 0;
+    private long fireRate = 100; // ms
 
-    public int getHealth() {
-        return health;
+    public Player() {
+        setAttribute("type", "player");
     }
 
-    public void decrementHealth() {
-        health--;
+    public double getDx() {
+        return dx;
     }
 
-    public boolean isDead() {
-        return health <= 0;
+    public void setDx(double dx) {
+        this.dx = dx;
     }
 
- */
-    private long lastShotTime;
+    public double getDy() {
+        return dy;
+    }
 
+    public void setDy(double dy) {
+        this.dy = dy;
+    }
 
     public long getLastShotTime() {
-    return lastShotTime;
+        return lastShotTime;
+    }
+
+    public void setLastShotTime(long lastShotTime) {
+        this.lastShotTime = lastShotTime;
     }
 
     public long getFireRate() {
-        return 100L;
+        return fireRate;
     }
 
-    public void setLastShotTime(long currentTime) {
-    this.lastShotTime = currentTime;
+    public void setFireRate(long fireRate) {
+        this.fireRate = fireRate;
     }
 }

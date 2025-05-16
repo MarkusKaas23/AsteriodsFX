@@ -1,6 +1,5 @@
 package dk.sdu.mmmi.cbse.playersystem;
 
-import dk.sdu.mmmi.cbse.common.bullet.Bullet;
 import dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
@@ -13,48 +12,56 @@ import java.util.ServiceLoader;
 
 import static java.util.stream.Collectors.toList;
 
-
 public class PlayerControlSystem implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
-        for (Entity player : world.getEntities(Player.class)) {
+        for (Entity entity : world.getEntities(Player.class)) {
+            Player player = (Player) entity;
+
+            double dx = player.getDx();
+            double dy = player.getDy();
+
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {
-                player.setRotation(player.getRotation() - 1.5);
+                player.setRotation(player.getRotation() - 2);
             }
             if (gameData.getKeys().isDown(GameKeys.RIGHT)) {
-                player.setRotation(player.getRotation() + 1.5);
+                player.setRotation(player.getRotation() + 2);
             }
+
             if (gameData.getKeys().isDown(GameKeys.UP)) {
-                double changeX = Math.cos(Math.toRadians(player.getRotation()));
-                double changeY = Math.sin(Math.toRadians(player.getRotation()));
-                player.setX(player.getX() + changeX);
-                player.setY(player.getY() + changeY);
-            }
-            if(gameData.getKeys().isDown(GameKeys.SPACE) && isReady(System.currentTimeMillis(), (Player) player)) {
-                    getBulletSPIs().stream().findFirst().ifPresent(
-                            spi -> world.addEntity(spi.createBullet(player, gameData))
-                    );
-            }
-            
-            if (player.getX() < 0) {
-                player.setX(1.25);
+                double radians = Math.toRadians(player.getRotation());
+                dx += Math.cos(radians) * 0.1;
+                dy += Math.sin(radians) * 0.1;
             }
 
-            if (player.getX() > gameData.getDisplayWidth()) {
-                player.setX(gameData.getDisplayWidth()-1.25);
+            // Damping
+            dx *= 0.95;
+            dy *= 0.95;
+
+            // Update position
+            player.setX(player.getX() + dx);
+            player.setY(player.getY() + dy);
+            player.setDx(dx);
+            player.setDy(dy);
+
+            // Shooting
+            if (gameData.getKeys().isDown(GameKeys.SPACE) && isReady(System.currentTimeMillis(), player)) {
+                getBulletSPIs().stream().findFirst().ifPresent(
+                        spi -> world.addEntity(spi.createBullet(player, gameData))
+                );
             }
 
-            if (player.getY() < 0) {
-                player.setY(1.25);
-            }
-
-            if (player.getY() > gameData.getDisplayHeight()) {
-                player.setY(gameData.getDisplayHeight()-1.25);
-            }
-
-                                        
+            // Screen wrap
+            wrapAround(player, gameData);
         }
+    }
+
+    private void wrapAround(Entity player, GameData gameData) {
+        if (player.getX() < 0) player.setX(gameData.getDisplayWidth());
+        if (player.getX() > gameData.getDisplayWidth()) player.setX(0);
+        if (player.getY() < 0) player.setY(gameData.getDisplayHeight());
+        if (player.getY() > gameData.getDisplayHeight()) player.setY(0);
     }
 
     private boolean isReady(long currentTime, Player player) {

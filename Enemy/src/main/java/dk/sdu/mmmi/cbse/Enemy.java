@@ -3,21 +3,26 @@ package dk.sdu.mmmi.cbse;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 
 public class Enemy extends Entity {
+    private double dx = 0;
+    private double dy = 0;
 
-    /* Health feat.  -  Not used
-    private int health = 1;
-
-    public int getHealth() {
-        return health;
+    public Enemy() {
+        setAttribute("type", "enemy");
     }
 
-    public void decrementHealth() {
-        health--;
+    public double getDx() {
+        return dx;
     }
 
-    public boolean isDead() {
-        return health <= 0;
+    public void setDx(double dx) {
+        this.dx = dx;
     }
 
-     */
+    public double getDy() {
+        return dy;
+    }
+
+    public void setDy(double dy) {
+        this.dy = dy;
+    }
 }
