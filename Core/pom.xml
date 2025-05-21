@@ -37,6 +37,11 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>6.1.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
             <version>6.1.3</version>
         </dependency>
@@ -55,6 +60,35 @@
             <artifactId>commons-logging</artifactId>
             <version>1.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-observation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-commons</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-core</artifactId>
+        </dependency>
+        <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>javax.servlet-api</artifactId>
+        <scope>provided</scope>
+    </dependency>
 
         <!-- JavaFX -->
         <dependency>
@@ -112,7 +146,8 @@
                         <configuration>
                             <includeArtifactIds>
                                 javafx-controls,javafx-graphics,javafx-base,
-                                spring-context,spring-core,spring-beans,spring-aop,spring-expression, commons-logging
+                                spring-context,spring-core,spring-beans,spring-aop,spring-expression,spring-web, commons-logging,
+                                micrometer-commons, micrometer-core, micrometer-observation,javax.servlet-api,jackson-databind, httpclient
                             </includeArtifactIds>
                             <outputDirectory>../mods-mvn</outputDirectory>
                         </configuration>

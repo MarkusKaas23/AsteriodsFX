@@ -11,8 +11,11 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.*;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +31,7 @@ public class Game {
     private final List<IGamePluginService> gamePluginServices;
     private final List<IEntityProcessingService> entityProcessingServices;
     private final List<IPostEntityProcessingService> postEntityProcessingServices;
-    private final IScoreService scoreService;
+
 
     private final Text asteroidText = new Text(10, 20, "Destroyed: 0");
     private final Text highscoreText = new Text(500, 20, "Highscore: 0");
@@ -38,20 +41,22 @@ public class Game {
 
     private AnimationTimer gameLoop;
 
-    // Highscore file and value
+    private RestTemplate restTemplate;
+
+    private final String scoreServiceUrl = "http://localhost:8080/score";
+
     private int highscore = 0;
     private final Path highscoreFile = Paths.get("Highscore.txt");
 
     public Game(
             List<IGamePluginService> gamePluginServices,
             List<IEntityProcessingService> entityProcessingServices,
-            List<IPostEntityProcessingService> postEntityProcessingServices,
-            IScoreService scoreService
+            List<IPostEntityProcessingService> postEntityProcessingServices
     ) {
         this.gamePluginServices = gamePluginServices;
         this.entityProcessingServices = entityProcessingServices;
         this.postEntityProcessingServices = postEntityProcessingServices;
-        this.scoreService = scoreService;
+        this.restTemplate = new RestTemplate();
     }
 
     public void start(Stage stage) {
@@ -115,10 +120,6 @@ public class Game {
     }
 
     public void render() {
-        if (scoreService == null) {
-            throw new IllegalStateException("ScoreService is not initialized");
-        }
-
         if (gameLoop == null) {
             gameLoop = new AnimationTimer() {
                 @Override
@@ -127,14 +128,23 @@ public class Game {
                     draw();
                     gameData.getKeys().update();
 
-                    int currentScore = scoreService.getScore();
-                    asteroidText.setText("Destroyed: " + currentScore);
+                    String url = scoreServiceUrl + "/total";
+
+                    ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+                    Long score = Long.valueOf(response.getBody());
+
+                    //int currentScore = scoreServiceUrl.getScore();
+                    asteroidText.setText("Destroyed: " + score);
+
+/*
 
                     if (currentScore > highscore) {
                         highscore = currentScore;
                         saveHighscore();
                     }
                     highscoreText.setText("Highscore: " + highscore);
+
+ */
                 }
             };
             gameLoop.start();

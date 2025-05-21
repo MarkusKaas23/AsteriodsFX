@@ -80,13 +80,12 @@ public class ModuleConfig {
     @Bean
     public Game game(List<IGamePluginService> plugins,
                      List<IEntityProcessingService> entityProcessors,
-                     List<IPostEntityProcessingService> postProcessors,
-                     IScoreService scoreService) {
-        return new Game(plugins, entityProcessors, postProcessors, scoreService);
+                     List<IPostEntityProcessingService> postProcessors) {
+        return new Game(plugins, entityProcessors, postProcessors);
     }
 
     private <T> List<T> loadServices(Class<T> serviceClass) {
-        return ServiceLoader.load(serviceClass)
+        return ServiceLoader.load(Main.layer, serviceClass)
                 .stream()
                 .map(ServiceLoader.Provider::get)
                 .collect(Collectors.toList());

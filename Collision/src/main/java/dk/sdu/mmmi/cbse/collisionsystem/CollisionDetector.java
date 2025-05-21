@@ -6,16 +6,25 @@ import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IScoreService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ServiceLoader;
 
-public class CollisionDetector implements IPostEntityProcessingService {
 
+public class CollisionDetector implements IPostEntityProcessingService {
+    private final RestTemplate restTemplate;
     private final IAsteroidSplitter asteroidSplitter =
             ServiceLoader.load(IAsteroidSplitter.class).findFirst().orElse(null);
 
     private final IScoreService scoreService =
             ServiceLoader.load(IScoreService.class).findFirst().orElse(null);
+
+    public CollisionDetector() {
+        this.restTemplate = new RestTemplate();
+    }
+
+    private final String scoreServiceUrl = "http://localhost:8080/score";
 
     @Override
     public void process(GameData gameData, World world) {
@@ -99,8 +108,6 @@ public class CollisionDetector implements IPostEntityProcessingService {
     }
 
     private void incrementScore() {
-        if (scoreService != null) {
-            scoreService.incrementScore();
-        }
+        ResponseEntity<String> response = restTemplate.getForEntity(scoreServiceUrl + "?point=" + 1, String.class);
     }
 }
