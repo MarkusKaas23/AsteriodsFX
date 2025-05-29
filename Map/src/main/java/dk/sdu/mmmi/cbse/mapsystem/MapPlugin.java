@@ -18,9 +18,9 @@ public class MapPlugin implements IGamePluginService {
         backgroundView.setFitWidth(gameData.getDisplayWidth());
         backgroundView.setFitHeight(gameData.getDisplayHeight());
 
-        Pane gameNode = gameData.getGameNode();  // This must be added in GameData (see next step)
+        Pane gameNode = gameData.getGameNode();
         if (gameNode != null) {
-            gameNode.getChildren().add(0, backgroundView); // Add behind all game entities
+            gameNode.getChildren().add(0, backgroundView);
         }
     }
 

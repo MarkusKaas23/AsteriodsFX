@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-// Test til: MapPlugin's background image addition and removal functionality.
+// Test til: MapPlugin
 public class MapPluginTest {
 
     @Test
@@ -42,7 +42,6 @@ public class MapPluginTest {
         assertTrue(gameData.getGameNode().getChildren().isEmpty());
     }
 
-    // Simple implementation of GameData for testing
     static class TestGameData extends GameData {
         private final Pane gameNode = new Pane();
 

@@ -108,6 +108,7 @@ public class CollisionDetector implements IPostEntityProcessingService {
     }
 
     private void incrementScore() {
-        ResponseEntity<String> response = restTemplate.getForEntity(scoreServiceUrl + "?point=" + 1, String.class);
+        ResponseEntity<String> response = restTemplate.getForEntity(
+                scoreServiceUrl + "?point=" + 1, String.class);
     }
 }

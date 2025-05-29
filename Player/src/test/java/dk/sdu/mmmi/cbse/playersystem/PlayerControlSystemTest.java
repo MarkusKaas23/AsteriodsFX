@@ -21,30 +21,25 @@ class PlayerControlSystemTest {
         gameData = new GameData();
         world = new World();
 
-        // Set game display bounds
         gameData.setDisplayWidth(800);
         gameData.setDisplayHeight(600);
 
-        // Setup a single player entity
         player = new Player();
         player.setX(100);
         player.setY(100);
-        player.setRotation(0); // Facing right
+        player.setRotation(0);
         world.addEntity(player);
 
-        // Set keys
         GameKeys keys = new GameKeys();
-        keys.setKey(GameKeys.UP, true);  // simulate UP key pressed
+        keys.setKey(GameKeys.UP, true);
         gameData.setKeys(keys);
     }
 
     @Test
     void testPlayerMovesForward() {
         double initialX = player.getX();
-
         controlSystem.process(gameData, world);
 
-        // Player should have moved along the X axis
         assertTrue(player.getX() > initialX, "Player should have moved forward along X axis");
     }
 }

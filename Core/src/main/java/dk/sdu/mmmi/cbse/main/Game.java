@@ -60,11 +60,10 @@ public class Game {
     }
 
     public void start(Stage stage) {
-        loadHighscore();  // Load highscore from file at start
+        loadHighscore();
 
         gameWindow.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
 
-        // Setup texts
         asteroidText.setFont(Font.font("Phosphate", 24));
         asteroidText.setFill(Color.WHITE);
 
@@ -78,15 +77,15 @@ public class Game {
 
         gameWindow.getChildren().addAll(asteroidText, highscoreText, gameOverText);
 
-        // Setup scene and input
+
         Scene scene = new Scene(gameWindow);
         gameData.setGameNode(gameWindow);
         setupInput(scene);
 
-        // Start plugins
+
         gamePluginServices.forEach(plugin -> plugin.start(gameData, world));
 
-        // Create polygons for existing entities
+
         for (Entity entity : world.getEntities()) {
             Polygon polygon = new Polygon(entity.getPolygonCoordinates());
             polygons.put(entity, polygon);
@@ -97,7 +96,6 @@ public class Game {
         stage.setTitle("Asteroids");
         stage.show();
 
-        // START GAME LOOP HERE!
         render();
     }
 
@@ -133,7 +131,6 @@ public class Game {
                     ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
                     Long score = Long.valueOf(response.getBody());
 
-                    //int currentScore = scoreServiceUrl.getScore();
                     asteroidText.setText("Destroyed: " + score);
 
 /*
@@ -157,7 +154,6 @@ public class Game {
     }
 
     private void draw() {
-        // Remove polygons for entities no longer present
         polygons.keySet().removeIf(entity -> {
             if (!world.getEntities().contains(entity)) {
                 gameWindow.getChildren().remove(polygons.get(entity));
@@ -166,7 +162,6 @@ public class Game {
             return false;
         });
 
-        // Draw/update polygons for all entities
         for (Entity entity : world.getEntities()) {
             Polygon polygon = polygons.get(entity);
 

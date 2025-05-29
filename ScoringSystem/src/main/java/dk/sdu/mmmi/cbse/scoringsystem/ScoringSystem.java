@@ -4,7 +4,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 @SpringBootApplication
 @RestController
 public class ScoringSystem {
@@ -21,8 +20,6 @@ public class ScoringSystem {
         totalScore += point;
         return totalScore;
     }
-
-
     @GetMapping("/score/total")
     public Long getTotalScore() {
         return totalScore;

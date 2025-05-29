@@ -29,19 +29,16 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         for (Entity entity : world.getEntities(Bullet.class)) {
             Bullet bullet = (Bullet) entity;
 
-            // Movement for bullet
             double changeX = Math.cos(Math.toRadians(bullet.getRotation()));
             double changeY = Math.sin(Math.toRadians(bullet.getRotation()));
             bullet.setX(bullet.getX() + changeX * 5);
             bullet.setY(bullet.getY() + changeY * 5);
 
-            // Check expiration based on system time
             if (now - bullet.getCreationTime() > bullet.getExpiration()) {
                 bulletsToRemove.add(bullet);
                 continue;
             }
 
-            // Out of bounds check
             if (bullet.getX() < 0 || bullet.getX() > gameData.getDisplayWidth()
                     || bullet.getY() < 0 || bullet.getY() > gameData.getDisplayHeight()) {
                 bulletsToRemove.add(bullet);

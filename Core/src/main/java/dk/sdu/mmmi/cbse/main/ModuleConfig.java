@@ -39,10 +39,6 @@ public class ModuleConfig {
     public List<IPostEntityProcessingService> postEntityProcessingServices() {
         return loadServices(IPostEntityProcessingService.class);
     }
-
-    /**
-     * Replace this with your actual score service implementation bean.
-     */
     @Bean
     public IScoreService scoreService() {
         // TODO: Provide a concrete implementation, e.g. new ScoreServiceImpl()
