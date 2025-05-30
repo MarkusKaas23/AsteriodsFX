@@ -6,7 +6,7 @@ public class Player extends Entity {
     private double dx = 0;
     private double dy = 0;
     private long lastShotTime = 0;
-    private long fireRate = 100; // ms
+    private long fireRate = 100; // 0,100 sek
 
     public Player() {
         setAttribute("type", "player");

@@ -8,7 +8,6 @@ import java.util.UUID;
 public class Entity implements Serializable {
 
     private final UUID ID = UUID.randomUUID();
-    
     private double[] polygonCoordinates;
     private double x;
     private double y;

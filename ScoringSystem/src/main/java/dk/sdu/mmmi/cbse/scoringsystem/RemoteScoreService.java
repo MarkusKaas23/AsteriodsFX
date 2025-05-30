@@ -3,6 +3,8 @@
 import dk.sdu.mmmi.cbse.common.services.IScoreService;
 import org.springframework.web.client.RestTemplate;
 
+//Unused
+
 public class RemoteScoreService {
 
     private final RestTemplate restTemplate = new RestTemplate();

@@ -5,7 +5,7 @@ import dk.sdu.mmmi.cbse.common.data.Entity;
 
 public class Bullet extends Entity {
     private long creationTime = System.currentTimeMillis();
-    private long expiration = 1000; // 1 sek levetid
+    private long expiration = 1200; // 1,2 sek levetid
 
     public long getCreationTime() {
         return creationTime;
