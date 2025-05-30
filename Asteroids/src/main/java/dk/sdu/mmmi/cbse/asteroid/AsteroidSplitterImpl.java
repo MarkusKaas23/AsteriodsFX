@@ -7,10 +7,7 @@ import dk.sdu.mmmi.cbse.common.data.World;
 
 import java.util.Random;
 
-/**
- *
- * @author corfixen
- */
+
 public class AsteroidSplitterImpl implements IAsteroidSplitter {
 
     @Override

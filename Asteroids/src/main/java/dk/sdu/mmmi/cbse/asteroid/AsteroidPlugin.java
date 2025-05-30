@@ -7,10 +7,7 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import java.util.Random;
 
-/**
- *
- * @author corfixen
- */
+
 public class AsteroidPlugin implements IGamePluginService {
 
     @Override

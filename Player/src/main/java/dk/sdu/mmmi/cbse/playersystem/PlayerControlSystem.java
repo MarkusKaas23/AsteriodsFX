@@ -35,24 +35,20 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 dy += Math.sin(radians) * 0.1;
             }
 
-            // Damping
             dx *= 0.95;
             dy *= 0.95;
 
-            // Update position
             player.setX(player.getX() + dx);
             player.setY(player.getY() + dy);
             player.setDx(dx);
             player.setDy(dy);
 
-            // Shooting
             if (gameData.getKeys().isDown(GameKeys.SPACE) && isReady(System.currentTimeMillis(), player)) {
                 getBulletSPIs().stream().findFirst().ifPresent(
                         spi -> world.addEntity(spi.createBullet(player, gameData))
                 );
             }
 
-            // Screen wrap
             wrapAround(player, gameData);
         }
     }

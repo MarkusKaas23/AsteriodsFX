@@ -2,10 +2,7 @@ package dk.sdu.mmmi.cbse.common.bullet;
 
 import dk.sdu.mmmi.cbse.common.data.Entity;
 
-/**
- *
- * @author corfixen
- */
+
 public class Bullet extends Entity {
     private long creationTime = System.currentTimeMillis();
     private long expiration = 1000; // 1 sek levetid
